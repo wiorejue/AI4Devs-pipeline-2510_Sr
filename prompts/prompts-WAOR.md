@@ -1,5 +1,7 @@
 # Prompts para el Ejercicio Creando un Pipeline en GitHub Actions
 
+> **Nota:** Este ejercicio fue desarrollado utilizando **Antigravity** como asistente de codificación e IDE inteligente.
+
 ## 1. Configuración de Infraestructura y Seguridad
 
 * **En AWS (EC2):**

@@ -59,7 +59,8 @@ jobs:
             cd backend
             
             # Install dependencies and build
-            npm install --production
+            # Install all dependencies (including devDependencies for build)
+            npm install
             npm run build
             
             # Restart application

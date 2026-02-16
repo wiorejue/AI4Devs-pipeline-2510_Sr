@@ -1,0 +1,72 @@
+name: CI/CD Pipeline
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
+jobs:
+  test-and-build:
+    name: Test and Build
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Tests
+        run: npm test
+
+      - name: Build Project
+        run: npm run build
+
+  deploy:
+    name: Deploy to EC2
+    needs: test-and-build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: SSH and Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.AWS_SSH_KEY }}
+          script: |
+            echo "Deploying to EC2..."
+            # Navigate to the project directory - adjust if necessary
+            cd ~/AI4Devs-pipeline-2510_Sr
+            
+            # Pull latest changes
+            git pull origin main
+            
+            # Go to backend
+            cd backend
+            
+            # Install dependencies and build
+            npm install --production
+            npm run build
+            
+            # Restart application
+            if command -v pm2 >/dev/null 2>&1; then
+                pm2 restart backend || pm2 start dist/index.js --name backend
+            else
+                echo "PM2 not found, starting with node..."
+                # Simple background run if PM2 is missing (not ideal for prod)
+                nohup node dist/index.js > app.log 2>&1 &
+            fi

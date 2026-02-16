@@ -58,21 +58,21 @@ jobs:
             # Go to backend
             cd backend
             
-            # Install dependencies and build
             # Install dependencies
-            npm install
+            npm install --production
             
-            # Manually install typescript to ensure compilation works
-            npm install typescript --no-save
+            # Force install typescript to ensure we can build
+            npm install typescript
             
-            # Run build
-            npx tsc
+            # Compile using the local tsc binary
+            ./node_modules/.bin/tsc
             
-            # Restart application
+            # Restart application (Delete and Start to ensure fresh config)
             if command -v pm2 >/dev/null 2>&1; then
-                pm2 restart backend || pm2 start dist/index.js --name backend
+                pm2 delete backend || true
+                pm2 start dist/index.js --name backend
             else
-                echo "PM2 not found, starting with node..."
-                # Simple background run if PM2 is missing (not ideal for prod)
+                echo "PM2 not found, using raw node..."
+                pkill -f "node dist/index.js" || true
                 nohup node dist/index.js > app.log 2>&1 &
             fi

@@ -2,6 +2,8 @@
 
 > **Nota:** Este ejercicio fue desarrollado utilizando **Antigravity** como asistente de codificación e IDE inteligente.
 
+Lista de prompts utilizados en el desarrollo del ejercicio:
+
 ## 1. Configuración de Infraestructura y Seguridad
 
 * **En AWS (EC2):**

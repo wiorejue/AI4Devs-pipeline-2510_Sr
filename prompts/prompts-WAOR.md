@@ -42,6 +42,11 @@ Se registraron los siguientes errores de compilación y sus soluciones:
 | Incidencia | Prompt Utilizado | Solución Aplicada |
 | --- | --- | --- |
 | **Errores de Compilación (TypeScript)** | Copiar y pegar el log de error: `src/application/services/positionService.ts:23:33 - error TS7006...` | Se añadieron tipos explícitos `any` en `map` y se corrigió el acceso a `Prisma.PrismaClientInitializationError` casteando a `any`. |
+
 | **Error ejecución Seed (`ts-node`)** | `ts-node : El término 'ts-node' no se reconoce...` | Se añadió configuración `prisma` en `package.json` para definir `seed` usando `ts-node`. Se debe ejecutar con `npx prisma db seed` o usar `npx ts-node`. |
+
 | **Error `Debug Failure` en `ts-node`** | `Error: Debug Failure. False expression...` | Incompatibilidad de versiones. Se actualizó `ts-node` (`npm i -D ts-node@latest`) y se ejecutó `npx prisma migrate reset` para limpiar la BD y correr el seed. |
+
 | **Tests duplicados y fallidos en `dist/`** | `FAIL dist/presentation/controllers/positionController.test.js` | Jest estaba ejecutando los archivos compilados en `dist/` además de los fuentes en `src/`. Se configuró `testPathIgnorePatterns: ['/node_modules/', '/dist/']` en `jest.config.js`. |
+
+| **Error en Deploy: `git: command not found`** | `bash: line 6: git: command not found` | El servidor EC2 no tenía Git instalado. Se solucionó conectándose manualmente y ejecutando `sudo yum install git -y` y clonando el repo por primera vez. |

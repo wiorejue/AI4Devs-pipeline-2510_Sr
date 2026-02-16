@@ -59,11 +59,14 @@ jobs:
             cd backend
             
             # Install dependencies and build
-            # Force npm to install dev dependencies by overriding config
-            npm config set production false
+            # Install dependencies
             npm install
-            npm run build
-            export NODE_ENV=production
+            
+            # Manually install typescript to ensure compilation works
+            npm install typescript --no-save
+            
+            # Run build
+            npx tsc
             
             # Restart application
             if command -v pm2 >/dev/null 2>&1; then

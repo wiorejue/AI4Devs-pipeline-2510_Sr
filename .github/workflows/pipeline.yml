@@ -59,8 +59,8 @@ jobs:
             cd backend
             
             # Install dependencies and build
-            # Install all dependencies (including devDependencies for build)
-            npm install
+            # Install all dependencies (including devDependencies for build) explicitly
+            npm install --include=dev
             npm run build
             
             # Restart application

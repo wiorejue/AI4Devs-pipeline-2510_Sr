@@ -59,8 +59,8 @@ jobs:
             cd backend
             
             # Install dependencies and build
-            # Force NODE_ENV to development to install ALL dependencies
-            export NODE_ENV=development
+            # Force npm to install dev dependencies by overriding config
+            npm config set production false
             npm install
             npm run build
             export NODE_ENV=production

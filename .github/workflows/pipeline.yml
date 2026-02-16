@@ -59,9 +59,11 @@ jobs:
             cd backend
             
             # Install dependencies and build
-            # Install all dependencies (including devDependencies for build) explicitly
-            npm install --include=dev
+            # Force NODE_ENV to development to install ALL dependencies
+            export NODE_ENV=development
+            npm install
             npm run build
+            export NODE_ENV=production
             
             # Restart application
             if command -v pm2 >/dev/null 2>&1; then

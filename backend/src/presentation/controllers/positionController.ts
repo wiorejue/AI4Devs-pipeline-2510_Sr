@@ -27,7 +27,7 @@ export const getCandidatesByPosition = async (req: Request, res: Response) => {
 
 export const getInterviewFlowByPosition = async (req: Request, res: Response) => {
     try {
-        const positionId = parseInt(req.params.id);
+        const positionId = parseInt(req.params.id as string);
         const interviewFlow = await getInterviewFlowByPositionService(positionId);
         res.status(200).json({ interviewFlow });
     } catch (error) {

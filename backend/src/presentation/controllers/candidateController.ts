@@ -17,7 +17,7 @@ export const addCandidateController = async (req: Request, res: Response) => {
 
 export const getCandidateById = async (req: Request, res: Response) => {
     try {
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id as string);
         if (isNaN(id)) {
             return res.status(400).json({ error: 'Invalid ID format' });
         }
@@ -33,7 +33,7 @@ export const getCandidateById = async (req: Request, res: Response) => {
 
 export const updateCandidateStageController = async (req: Request, res: Response) => {
     try {
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id as string);
         const { applicationId, currentInterviewStep } = req.body;
         const applicationIdNumber = parseInt(applicationId);
         if (isNaN(applicationIdNumber)) {

@@ -52,8 +52,12 @@ jobs:
             # Navigate to the project directory - adjust if necessary
             cd ~/AI4Devs-pipeline-2510_Sr
             
-            # Pull latest changes
-            git pull origin main
+            # Ensure we are on main branch and synced with origin
+            git checkout main
+            git fetch origin main
+            git reset --hard origin/main
+            echo "Current branch: $(git branch --show-current)"
+            echo "Latest commit: $(git log -1 --oneline)"
             
             # Go to backend
             cd backend

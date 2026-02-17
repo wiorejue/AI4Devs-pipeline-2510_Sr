@@ -1,6 +1,9 @@
 name: CI/CD Pipeline
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
@@ -52,21 +55,31 @@ jobs:
             # Navigate to the project directory - adjust if necessary
             cd ~/AI4Devs-pipeline-2510_Sr
             
-            # Pull latest changes
-            git pull origin main
+            # Ensure we are on main branch and synced with origin
+            git checkout main
+            git fetch origin main
+            git reset --hard origin/main
+            echo "Current branch: $(git branch --show-current)"
+            echo "Latest commit: $(git log -1 --oneline)"
             
             # Go to backend
             cd backend
             
-            # Install dependencies and build
-            npm install --production
+            # Install all dependencies (including devDeps for building)
+            npm install
+            
+            # Compile the project
             npm run build
+            
+            # Verify the build output
+            ls -la dist/
             
             # Restart application
             if command -v pm2 >/dev/null 2>&1; then
-                pm2 restart backend || pm2 start dist/index.js --name backend
+                pm2 delete backend || true
+                pm2 start dist/index.js --name backend
             else
-                echo "PM2 not found, starting with node..."
-                # Simple background run if PM2 is missing (not ideal for prod)
+                echo "PM2 not found, using raw node..."
+                pkill -f "node dist/index.js" || true
                 nohup node dist/index.js > app.log 2>&1 &
             fi

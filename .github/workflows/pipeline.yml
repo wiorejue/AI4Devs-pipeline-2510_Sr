@@ -65,16 +65,16 @@ jobs:
             # Go to backend
             cd backend
             
-            # Install dependencies
-            npm install --production
+            # Install all dependencies (including devDeps for building)
+            npm install
             
-            # Force install typescript to ensure we can build
-            npm install typescript
+            # Compile the project
+            npm run build
             
-            # Compile using the local tsc binary
-            ./node_modules/.bin/tsc
+            # Verify the build output
+            ls -la dist/
             
-            # Restart application (Delete and Start to ensure fresh config)
+            # Restart application
             if command -v pm2 >/dev/null 2>&1; then
                 pm2 delete backend || true
                 pm2 start dist/index.js --name backend
